@@ -107,6 +107,89 @@ class Home extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   )),
             ),
+            data['status'] != null
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text("Status:-"),
+                        Text(
+                          data['status'],
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: data['status'] == "Resolved"
+                                  ? Colors.green
+                                  : data['status'] == "No Action"
+                                      ? Colors.red
+                                      : data['status'] == "S/B Newspaper"
+                                          ? Colors.orange[300]
+                                          : Colors.black),
+                        )
+                      ],
+                    ),
+                  )
+                : Container(),
+            SizedBox(
+              height: 5,
+            ),
+            uid == "sZBBGjC7X9Q2UH2h7pP3eY6CLH63"
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          controller.changestatus("Published", id);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.orange[300],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "S/B Newspaper",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          controller.changestatus("Resolved", id);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.green[300],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Resolved",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          controller.changestatus("No Action", id);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.red[300],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "No Action",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

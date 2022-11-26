@@ -10,6 +10,7 @@ class MyPosts extends StatelessWidget {
   IssueController issueController = Get.put(IssueController());
   String? uid = FirebaseAuth.instance.currentUser?.uid;
   Widget build(BuildContext context) {
+    print(uid);
     issueController.getallissues();
     return Scaffold(
       appBar: AppBar(
@@ -82,6 +83,26 @@ class MyPosts extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   )),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Row(
+                children: [
+                  Text("Status: "),
+                  Text(
+                    data['status'],
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: data['status'] == "Resolved"
+                            ? Colors.green
+                            : data['status'] == "No Action"
+                                ? Colors.red
+                                : data['status'] == "S/B Newspaper"
+                                    ? Colors.orange[300]
+                                    : Colors.black),
+                  )
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

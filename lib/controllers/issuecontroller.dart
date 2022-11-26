@@ -73,6 +73,16 @@ class IssueController extends GetxController {
     update();
   }
 
+  Future changestatus(String status, String id) async {
+    EasyLoading.show();
+    await FirebaseFirestore.instance
+        .collection("issues")
+        .doc(id)
+        .set({"status": status}, SetOptions(merge: true));
+    await getallissues();
+    EasyLoading.dismiss();
+  }
+
   Future addlike(String id, List likedby) async {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
     likedby.add(uid);
