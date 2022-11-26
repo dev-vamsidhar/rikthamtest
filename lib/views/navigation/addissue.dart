@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:riktam/controllers/issuecontroller.dart';
+import 'package:riktam/controllers/navigationcontroller.dart';
 
 class AddIssue extends StatefulWidget {
   AddIssue({super.key});
@@ -13,8 +17,8 @@ class AddIssue extends StatefulWidget {
 class _AddIssueState extends State<AddIssue> {
   List<XFile> selectedfiles = [];
   TextEditingController location = TextEditingController();
-  TextEditingController date = TextEditingController();
-  TextEditingController time = TextEditingController();
+  TextEditingController date =
+      TextEditingController(text: DateTime.now().toString());
   TextEditingController description = TextEditingController();
 
   @override
@@ -38,7 +42,6 @@ class _AddIssueState extends State<AddIssue> {
               InkWell(
                 onTap: () async {
                   selectedfiles = await ImagePicker().pickMultiImage();
-
                   setState(() {});
                 },
                 child: Container(
@@ -112,7 +115,7 @@ class _AddIssueState extends State<AddIssue> {
                     label: Text("Description about the issue")),
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               TextField(
                 controller: location,
@@ -123,21 +126,23 @@ class _AddIssueState extends State<AddIssue> {
                     label: Text("Location(Address)")),
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               InkWell(
-                onTap: () {
-                  showDatePicker(
+                onTap: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  DateTime? datetime = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime.now());
+                  date.text = datetime.toString();
                 },
                 child: AbsorbPointer(
                   absorbing: true,
                   child: TextField(
                     enabled: false,
-                    controller: location,
+                    controller: date,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.date_range_outlined,
@@ -149,11 +154,39 @@ class _AddIssueState extends State<AddIssue> {
               SizedBox(
                 height: 20,
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  decoration: BoxDecoration(),
-                  child: Text("create"),
+              InkWell(
+                onTap: () async {
+                  NavigationController navigationcontroller = Get.find();
+
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  await IssueController().uploadissue(selectedfiles,
+                      description.text, location.text, date.text);
+                  await IssueController().getallissues();
+                  navigationcontroller.index.value = 2;
+                  navigationcontroller.update();
+                  selectedfiles = [];
+                  description.clear();
+                  EasyLoading.showToast("Civic issue added");
+                  location.clear();
+                },
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    width: 150,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.indigo,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                      child: Text(
+                        "create",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
                 ),
               )
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:riktam/controllers/authentication.dart';
-import 'package:riktam/views/signup.dart';
+import 'package:riktam/views/authentication/signup.dart';
 
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);

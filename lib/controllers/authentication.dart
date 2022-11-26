@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:riktam/views/home.dart';
+import 'package:riktam/views/navigation.dart';
+import 'package:riktam/views/navigation/home.dart';
 
 class AuthenticationController extends GetxController {
   @override
@@ -19,7 +20,7 @@ class AuthenticationController extends GetxController {
       EasyLoading.dismiss();
       if (credential.user != null) {
         //signin sucessfull
-        Get.offAll(Home());
+        Get.offAll(Navigation());
       }
     } on FirebaseAuthException catch (e) {
       EasyLoading.dismiss();
@@ -37,9 +38,10 @@ class AuthenticationController extends GetxController {
       ;
       if (credential.user != null) {
         //signin sucessfull
+        await FirebaseAuth.instance.currentUser?.updateDisplayName(username);
         await saveuser(email, username);
         EasyLoading.dismiss();
-        Get.offAll(Home());
+        Get.offAll(Navigation());
       }
     } on FirebaseAuthException catch (e) {
       EasyLoading.dismiss();
